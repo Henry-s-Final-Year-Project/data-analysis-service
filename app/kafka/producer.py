@@ -8,7 +8,11 @@ producer = KafkaProducer(
 )
 
 
-def send_alert(prediction: dict, record: dict):
-    message = {"transaction": record, "prediction": prediction}
+def send_alert(raw_transaction: dict, prediction: dict, record: dict):
+    message = {
+        "original_transaction": raw_transaction,
+        "transaction": record,
+        "prediction": prediction,
+    }
     producer.send(settings.KAFKA_ALERTS_TOPIC, message)
     producer.flush()

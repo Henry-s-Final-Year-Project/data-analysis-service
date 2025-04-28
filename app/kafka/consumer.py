@@ -30,12 +30,13 @@ def start_analysis_consumer():
 
     logger.info("Analysis service listening on %s …", settings.KAFKA_PREPROCESSED_TOPIC)
     for msg in consumer:
-        logger.info("Received message: %s", msg.value)
-        features = msg.value
+        logger.info("Received message: %s", msg.value["features"])
+        features = msg.value["features"]
         record = {"features": features}
+        raw_transaction = msg.value["original_transaction"]
         try:
             result = infer(record)
             logger.info("Inference result: %s", result)
-            yield result, record
+            yield result, record, raw_transaction
         except Exception as e:
             logger.error("Inference error: %s", e)

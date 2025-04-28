@@ -3,8 +3,8 @@ from app.kafka.producer import send_alert
 
 
 def main():
-    for prediction, record in start_analysis_consumer():
-        send_alert(prediction, record)
+    for prediction, record, original_transaction in start_analysis_consumer():
+        send_alert(original_transaction, prediction, record)
 
 
 if __name__ == "__main__":
